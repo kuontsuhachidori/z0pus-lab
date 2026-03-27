@@ -10,21 +10,23 @@
 <meta property="og:url" content="https://z0pus-lab.dev">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://z0pus-lab.dev">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0b'/%3E%3Ctext x='4' y='23' font-family='monospace' font-weight='700' font-size='18' fill='%23c9a55a'%3Ez0%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0b;
-    --bg2: #111113;
-    --bg3: #1a1a1d;
-    --surface: #222226;
-    --border: #2a2a2f;
+    --bg: #06060a;
+    --bg2: #0c0c12;
+    --bg3: #14141c;
+    --surface: #1a1a24;
+    --border: #1e1e2a;
+    --border-hover: #2a2a3a;
     --text: #e8e6e1;
-    --text-dim: #8a8884;
-    --text-muted: #5a5a58;
+    --text-dim: #8a8894;
+    --text-muted: #55556a;
     --accent: #c9a55a;
     --accent-dim: #8a7340;
-    --accent-glow: rgba(201, 165, 90, 0.08);
-    --omega: #d4b06a;
+    --accent-glow: rgba(201, 165, 90, 0.06);
+    --accent-bright: #e0be6a;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,21 +46,37 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9999;
   }
 
-  /* --- Grid background --- */
+  /* --- Dot grid background --- */
   .grid-bg {
     position: fixed;
     inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 80px 80px;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
   }
+
+  /* --- Mouse glow --- */
+  .cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 165, 90, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+
+  .cursor-glow.active { opacity: 1; }
 
   /* --- Nav --- */
   nav {
@@ -71,19 +89,40 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
-    backdrop-filter: blur(12px);
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(6,6,10,0.8) 60%, transparent 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
-  .nav-logo {
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .nav-logo-mark .z { color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; letter-spacing: 1px; }
+  .nav-logo-mark .zero { color: var(--accent); font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; }
+  .nav-logo-mark .rest { color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 300; letter-spacing: 1px; }
+
+  .nav-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border);
+  }
+
+  .nav-lab {
     font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
     text-transform: uppercase;
   }
-
-  .nav-logo span { color: var(--omega); font-weight: 500; }
 
   .nav-status {
     display: flex;
@@ -96,8 +135,7 @@
     text-transform: uppercase;
   }
 
-  .nav-status::before {
-    content: '';
+  .status-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -122,48 +160,78 @@
     padding: 0 48px;
   }
 
-  .omega-mark {
-    font-size: clamp(160px, 22vw, 280px);
-    font-family: 'Instrument Serif', serif;
-    color: var(--omega);
-    line-height: 1;
+  /* --- Logo mark: stylized "z0" --- */
+  .logo-mark {
     position: relative;
-    user-select: none;
-    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: logoIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .omega-mark::after {
-    content: 'Ω';
+  .logo-mark svg {
+    width: clamp(120px, 16vw, 200px);
+    height: auto;
+  }
+
+  .logo-stroke {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: drawStroke 2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  }
+
+  .logo-fill {
+    fill: var(--accent);
+    opacity: 0;
+    animation: logoFillIn 0.8s ease 1.8s forwards;
+  }
+
+  @keyframes drawStroke {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes logoFillIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes logoIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .logo-glow {
     position: absolute;
-    inset: 0;
-    color: transparent;
-    text-shadow: 0 0 120px rgba(201, 165, 90, 0.15);
+    inset: -60px;
+    background: radial-gradient(circle, rgba(201, 165, 90, 0.08) 0%, transparent 70%);
     pointer-events: none;
+    animation: glowPulse 4s ease-in-out infinite;
   }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
   }
 
   .hero-wordmark {
     font-family: 'DM Mono', monospace;
-    font-size: clamp(18px, 3vw, 28px);
-    letter-spacing: 12px;
+    font-size: clamp(14px, 2.5vw, 22px);
+    letter-spacing: 14px;
     color: var(--text-dim);
-    margin-top: -10px;
+    margin-top: 32px;
     font-weight: 300;
-    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
   }
+
+  .hero-wordmark .accent { color: var(--accent); font-weight: 500; }
 
   .hero-sub {
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
-    margin-top: 40px;
-    letter-spacing: 3px;
+    margin-top: 24px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
   }
 
   .divider-line {
@@ -171,7 +239,45 @@
     height: 80px;
     background: linear-gradient(180deg, var(--accent-dim), transparent);
     margin-top: 60px;
-    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Scroll indicator --- */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.2s both;
+  }
+
+  .scroll-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .scroll-arrow {
+    width: 16px;
+    height: 16px;
+    border-right: 1px solid var(--text-muted);
+    border-bottom: 1px solid var(--text-muted);
+    transform: rotate(45deg);
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.5; }
+    50% { transform: rotate(45deg) translateY(6px); opacity: 1; }
   }
 
   /* --- Projects section --- */
@@ -198,13 +304,13 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--border);
+    background: linear-gradient(90deg, var(--border), transparent);
   }
 
   /* --- Project cards --- */
   .project-card {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 32px;
     margin-bottom: 16px;
     background: var(--bg2);
@@ -212,34 +318,51 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: 24px;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: pointer;
     text-decoration: none;
     color: inherit;
+    position: relative;
+    overflow: hidden;
   }
 
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 165, 90, 0.04), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .project-card:hover::before { opacity: 1; }
+
   .project-card:hover {
-    border-color: var(--accent-dim);
+    border-color: var(--border-hover);
     background: var(--bg3);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.3), 0 0 0 1px var(--accent-dim);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(201, 165, 90, 0.1);
   }
 
   .project-card-archived {
-    opacity: 0.5;
-    transition: all 0.3s ease;
+    opacity: 0.45;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .project-card-archived:hover {
-    opacity: 0.75;
+    opacity: 0.7;
   }
 
   .project-name {
     font-size: 18px;
     font-weight: 500;
     letter-spacing: 0.5px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    transition: color 0.3s;
   }
+
+  .project-card:hover .project-name { color: var(--accent-bright); }
 
   .project-meta {
     font-family: 'DM Mono', monospace;
@@ -261,10 +384,20 @@
     border-radius: 100px;
     border: 1px solid;
     white-space: nowrap;
+    transition: all 0.3s;
   }
 
-  .badge-live { color: #4ade80; border-color: rgba(74, 222, 128, 0.25); background: rgba(74, 222, 128, 0.06); }
-  .badge-closed { color: var(--text-muted); border-color: var(--border); background: rgba(255,255,255,0.02); }
+  .badge-live {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.2);
+    background: rgba(74, 222, 128, 0.05);
+  }
+
+  .badge-closed {
+    color: var(--text-muted);
+    border-color: var(--border);
+    background: rgba(255,255,255,0.02);
+  }
 
   .project-right {
     display: flex;
@@ -276,12 +409,12 @@
     width: 20px;
     height: 20px;
     color: var(--text-muted);
-    transition: all 0.3s;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .project-card:hover .arrow-icon {
     color: var(--accent);
-    transform: translateX(4px);
+    transform: translateX(6px);
   }
 
   /* --- Footer --- */
@@ -305,8 +438,8 @@
   /* --- Animations on scroll --- */
   .fade-in {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(24px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .fade-in.visible {
@@ -317,29 +450,63 @@
   /* --- Responsive --- */
   @media (max-width: 640px) {
     nav { padding: 20px 24px; }
+    .nav-lab { display: none; }
+    .nav-divider { display: none; }
     .hero { padding: 0 24px; }
     .section { padding: 60px 24px; }
     footer { padding: 40px 24px; }
-    .hero-wordmark { letter-spacing: 6px; }
-    .project-card { grid-template-columns: 1fr; padding: 24px; }
+    .hero-wordmark { letter-spacing: 8px; }
+    .project-card { grid-template-columns: 1fr; padding: 24px; border-radius: 12px; }
     .project-card .badge { justify-self: start; }
+    .scroll-hint { display: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="grid-bg"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
 
 <nav>
-  <div class="nav-logo">z<span>0</span>pus · lab</div>
-  <div class="nav-status">systems operational</div>
+  <div class="nav-brand">
+    <div class="nav-logo-mark">
+      <span class="z">Z</span><span class="zero">0</span><span class="rest">PUS</span>
+    </div>
+    <div class="nav-divider"></div>
+    <span class="nav-lab">lab</span>
+  </div>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    systems operational
+  </div>
 </nav>
 
 <section class="hero">
-  <div class="omega-mark">Ω</div>
-  <div class="hero-wordmark">z0pus — lab</div>
+  <div class="logo-mark">
+    <div class="logo-glow"></div>
+    <svg viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- z -->
+      <path class="logo-stroke" d="M8 22h42L8 72h42" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="logo-fill" d="M8 18h42a4 4 0 010 8H22.5L50 68H8a4 4 0 010-8h27.5L8 18z" opacity="0"/>
+      <!-- 0 -->
+      <g transform="translate(62, 0)">
+        <rect class="logo-stroke" x="8" y="18" width="48" height="56" rx="24" stroke-linecap="round"/>
+        <rect class="logo-fill" x="8" y="18" width="48" height="56" rx="24" opacity="0"/>
+        <!-- slash through 0 -->
+        <line class="logo-stroke" x1="18" y1="64" x2="46" y2="28" stroke-linecap="round"/>
+        <line class="logo-fill" x1="18" y1="64" x2="46" y2="28" stroke="var(--accent)" stroke-width="2" opacity="0"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-wordmark">z<span class="accent">0</span>pus — lab</div>
   <div class="hero-sub">staging · preview · review</div>
   <div class="divider-line"></div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
 </section>
 
 <section class="section">
@@ -347,7 +514,7 @@
 
   <a href="https://narthex.z0pus-lab.dev" target="_blank" rel="noopener" class="project-card fade-in">
     <div>
-      <div class="project-name">Narthex</div>
+      <div class="project-name">Narthex Dental</div>
       <div class="project-meta">
         <span>narthex.z0pus-lab.dev</span>
       </div>
@@ -377,13 +544,13 @@
 
   <a href="https://ryoku.xyz" target="_blank" rel="noopener" class="project-card project-card-archived fade-in">
     <div>
-      <div class="project-name">Ryoku</div>
+      <div class="project-name">Ryoku Research</div>
       <div class="project-meta">
         <span>ryoku.xyz</span>
       </div>
     </div>
     <div class="project-right">
-      <span class="badge badge-closed">Closed</span>
+      <span class="badge badge-closed">Archived</span>
       <svg class="arrow-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10h12M12 6l4 4-4 4"/></svg>
     </div>
   </a>
@@ -394,15 +561,62 @@
 </footer>
 
 <script>
+  // --- Intersection Observer for fade-in ---
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // --- Cursor glow follow ---
+  const glow = document.getElementById('cursorGlow');
+  let glowActive = false;
+
+  document.addEventListener('mousemove', (e) => {
+    if (!glowActive) {
+      glow.classList.add('active');
+      glowActive = true;
+    }
+    requestAnimationFrame(() => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+  });
+
+  document.addEventListener('mouseleave', () => {
+    glow.classList.remove('active');
+    glowActive = false;
+  });
+
+  // --- Card spotlight effect ---
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mouse-x', x + '%');
+      card.style.setProperty('--mouse-y', y + '%');
+    });
+  });
+
+  // --- Smooth parallax on hero ---
+  const hero = document.querySelector('.hero');
+  const logoMark = document.querySelector('.logo-mark');
+
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const heroHeight = hero.offsetHeight;
+    if (scrolled < heroHeight) {
+      const progress = scrolled / heroHeight;
+      logoMark.style.transform = `translateY(${scrolled * 0.15}px) scale(${1 - progress * 0.1})`;
+      logoMark.style.opacity = 1 - progress * 1.2;
+    }
+  }, { passive: true });
 </script>
 
 </body>
