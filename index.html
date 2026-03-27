@@ -345,13 +345,13 @@
     box-shadow: 0 12px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(201, 165, 90, 0.1);
   }
 
-  .project-card-archived {
-    opacity: 0.45;
+  .project-card-delivered {
+    opacity: 0.55;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .project-card-archived:hover {
-    opacity: 0.7;
+  .project-card-delivered:hover {
+    opacity: 0.8;
   }
 
   .project-name {
@@ -393,10 +393,10 @@
     background: rgba(74, 222, 128, 0.05);
   }
 
-  .badge-closed {
-    color: var(--text-muted);
-    border-color: var(--border);
-    background: rgba(255,255,255,0.02);
+  .badge-delivered {
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.2);
+    background: rgba(96, 165, 250, 0.05);
   }
 
   .project-right {
@@ -510,7 +510,7 @@
 </section>
 
 <section class="section">
-  <div class="section-label fade-in">Active projects</div>
+  <div class="section-label fade-in">In development</div>
 
   <a href="https://narthex.z0pus-lab.dev" target="_blank" rel="noopener" class="project-card fade-in">
     <div>
@@ -540,9 +540,9 @@
 </section>
 
 <section class="section" style="padding-top: 20px;">
-  <div class="section-label fade-in">Archived</div>
+  <div class="section-label fade-in">Delivered</div>
 
-  <a href="https://ryoku.xyz" target="_blank" rel="noopener" class="project-card project-card-archived fade-in">
+  <a href="https://ryoku.xyz" target="_blank" rel="noopener" class="project-card project-card-delivered fade-in">
     <div>
       <div class="project-name">Ryoku Research</div>
       <div class="project-meta">
@@ -550,7 +550,7 @@
       </div>
     </div>
     <div class="project-right">
-      <span class="badge badge-closed">Archived</span>
+      <span class="badge badge-delivered">Delivered</span>
       <svg class="arrow-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10h12M12 6l4 4-4 4"/></svg>
     </div>
   </a>
